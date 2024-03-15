@@ -4,6 +4,7 @@ const userCon=require('../../controller/user/userCon')
 const {userauthenticateToken,otpauthenticateToken} = require('../../middleware/auth');
 const upload = require("../../middleware/upload");
 
+
 // -------------------------- INDEX --------------------------
 router.get('/index' ,userauthenticateToken,userCon.index)
 
@@ -57,6 +58,12 @@ router.post('/addmember',userauthenticateToken,userCon.addMember)
 
 // -------------------------- UPDATE GROUP -------------------------
 router.post('/updategroup',userauthenticateToken,upload.single('photo'),userCon.updateGroup)
+
+//----------------------------- DELETE GROUP ----------------------
+router.post("/deletegroup", userauthenticateToken , userCon.deleteGroup);
+
+// ------------------------------ SHARE GROUP ------------------------
+router.get("/share-group/:id",userCon.shareGroup)
 
 
 module.exports=router

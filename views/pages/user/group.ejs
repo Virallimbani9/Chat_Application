@@ -20,8 +20,10 @@
     <!-- Icons Css -->
     <link href="/assets/css/icons.min.css" rel="stylesheet" type="text/css" />
     <link rel="stylesheet" href="/assets/css/style.css" >
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha384-gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha384-gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    
     <!-- App Css-->
     <link
       href="/assets/css/app.min.css"
@@ -106,7 +108,7 @@
             <table class="table mt-4">
 
             <thead>
-              <tr>
+              <tr style="text-align: center;">
                 <th>S.no</th>
                 <th>Group Photo</th>
                 <th>Group Name</th>
@@ -124,16 +126,20 @@
               <% } %>
               
               <% group.forEach((group, index)=> { %>
-                <tr>
+                <tr style="text-align: center;">
                   <td><%= index+1 %></td>
                   <td><img src="/assets/upload/<%= group.photo %>" alt="" class="rounded" style="width: 100px; height: 50px;"></td>
                   <td><%= group.name %></td>
                   <td><%= group.limit %></td>
-                  <td><a class="cursor-pointer addMember" data-id="<%= group._id %>" data-limit="<%= group.limit %>" data-toggle="modal" data-target="#viewmembermodel">Member</a></td>
+                  <td><button type="button" class="btn btn-success  cursor-pointer addMember" data-id="<%= group._id %>" data-limit="<%= group.limit %>" data-toggle="modal" data-target="#viewmembermodel">Add Member</button></td>
                   <td>
                     <!-- <a href="/user/groupchat/<%= group._id %>" class="btn btn-primary">Chat</a> -->
 
-                    <a class="updateGroup" data-obj="<%= JSON.stringify(group) %>" data-limit="<%= group.limit %>" data-name  data-toggle="modal" data-target="#updateGroupCenter"><i class="fa fa-pencil-alt"></i></a>
+                    <button type="button" class="btn btn-warning updateGroup" data-obj="<%= JSON.stringify(group) %>" data-limit="<%= group.limit %>"  data-toggle="modal" data-target="#updateGroupCenter">Edit</button>
+
+                    <button type="button" class="btn btn-danger  deleteGroup" data-id="<%= group._id %>" data-name="<%= group.name %>"  data-toggle="modal" data-target="#deleteGroupCenter">Delete</button>
+
+                    <button type="button" class="btn btn-dark copyGroup cursor-pointer" data-id="<%= group._id %>">Copy</button>
                   </td>
                 </tr>
               <% }) %>
@@ -143,7 +149,6 @@
 
 
             <!--Member Modal -->
-
             <div class="modal fade" id="viewmembermodel" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
               <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
@@ -192,8 +197,6 @@
                 </div>
               </div>
             </div>
-
-
 
 
 
@@ -251,13 +254,44 @@
                     <input type="file" name="photo"  class="w-100 mb-2"> 
                     <input type="number" name="limit" min="1" id="group_limit" placeholder="Enter Group Member Limit" required class="w-100 mb-2">  
 
-                    <p><b>(Note)</b> If you enter the limit less then to previous limit , we will remove the all users from your group..... </p>
+                    <p><b>(Note) </b> If you enter the limit less then to previous limit , we will remove the all users from your group..... </p>
 
 
                   </div>
                   <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                     <button type="submit" class="btn btn-warning">Update</button>
+                  </div>
+                </form>
+
+                </div>
+              </div>
+            </div>
+
+
+            <!-- Delete Group Modal -->
+            <div class="modal fade" id="deleteGroupCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="DeleteGroup">Delete Group</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+
+                  <form action="/user/deletegroup" method="post" id="deleteChatGroupForm">
+
+                  <div class="modal-body">
+
+                    <input type="hidden" name="id" id="delete_group_id">
+        
+                    <p>Are you sure you want to delete <b id="delete_group_name"></b> group</p>
+
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-danger">Delete</button>
                   </div>
                 </form>
 
@@ -282,6 +316,7 @@
     <script src="/assets/js/app.js"></script>
     
   </body>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
   <script src="/socket.io/socket.io.js"></script>
   <script src="https://cdn.socket.io/4.4.1/socket.io.js"></script>
   <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>

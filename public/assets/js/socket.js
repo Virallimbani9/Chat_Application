@@ -9,34 +9,36 @@ function getCookie(name) {
       )
     );
     return matches ? decodeURIComponent(matches[1]) : undefined;
-  }
+}
   
-  let userData = JSON.parse(getCookie("user"));
+let userData = JSON.parse(getCookie("user"));
   
-  let sender_id = userData._id;
-  let receiver_id;
-  let socket = io("/user", {
-    auth: {
-      token: userData._id,
-    },
-  });
-  socket.on("getOnlineUser", (data) => {
+let sender_id = userData._id;
+let receiver_id;
+let socket = io("/user", {
+  auth: {
+    token: userData._id,
+  },
+});
+
+
+socket.on("getOnlineUser", (data) => {
     $("#" + data.userId + "-status").html(
       '<i style="font-size:18px;color: green;" class="far">&#xf4ad;</i>'
     );
     $("#" + data.userId + "-status").removeClass("status2 ");
     $("#" + data.userId + "-status").addClass("status1");
-  });
+});
   
-  socket.on("getOfflineUser", (data) => {
+socket.on("getOfflineUser", (data) => {
     $("#" + data.userId + "-status").html(
       '<i style="font-size:15px;color:red" class="fas">&#xf4b3;</i>'
     );
     $("#" + data.userId + "-status").addClass("status2 ");
     $("#" + data.userId + "-status").removeClass("status1");
-  });
+});
   
-  $(document).ready(function () {
+$(document).ready(function () {
     $(".user-list").click(function () {
       let user_id = $(this).attr("data-id");
       receiver_id = user_id;
@@ -47,9 +49,9 @@ function getCookie(name) {
         receiver_id: receiver_id,
       });
     });
-  });
+});
   
-  $("#chat-form").submit(function (event) {
+$("#chat-form").submit(function (event) {
     event.preventDefault();
     let message = $("#message").val();
     $.ajax({
@@ -73,19 +75,21 @@ function getCookie(name) {
         }
       },
     });
-  });
-  //---------------load chats-------------------//
-  socket.on("loadNewChat", (data) => {
+});
+
+
+//---------------load chats-------------------//
+socket.on("loadNewChat", (data) => {
     if (sender_id == data.receiver_id && receiver_id == data.sender_id) {
       let html = ` <div class="distance-user-chat">` + data.message + `</div>`;
       $("#chat-container").append(html);
     }
     scrollChat();
-  });
-  
-  //------------load old chats----------//
-  
-  socket.on("loadChats", (data) => {
+});
+
+
+//------------load old chats----------//
+socket.on("loadChats", (data) => {
     $("#chat-container").html("");
     let chats = data.chats;
     let html = "";
@@ -102,9 +106,9 @@ function getCookie(name) {
     }
     $("#chat-container").append(html);
     scrollChat();
-  });
+});
   
-  function scrollChat() {
+function scrollChat() {
     $("#chat-container").animate(
       {
         scrollTop:
@@ -113,11 +117,12 @@ function getCookie(name) {
       },
       0
     );
-  }
+}
   
-// Add Member
 
+// Add Member
 $('.addMember').click(function () {
+  console.log("call")
   var id = $(this).attr('data-id');
   var limit = $(this).attr('data-limit');
 
@@ -156,26 +161,36 @@ $('.addMember').click(function () {
 );
 
 
-// Add Member
-
-$('#add-member-form').submit(function (event) {
-  event.preventDefault();
-  var formData = $(this).serialize();  
-  $.ajax({
-    url: '/user/addmember',
-    type: 'POST',
-    data: formData,
-    success: function (res) {
-      if (res.success) {
-        alert(res.message);
-        location.reload();
-      } else {
-        $('#error').html(res.message);
+// Update Member
+$(document).ready(function() {
+  $('#add-member-form').submit(function (event) {
+    event.preventDefault();
+    var formData = $(this).serialize();  
+    $.ajax({
+      url: '/user/addmember',
+      type: 'POST',
+      data: formData,
+      success: function (res) {
+        if (res.success) {
+          setTimeout(function() {
+          location.reload();
+        }, 1000);
+            Swal.fire({
+              title: "ADD!",
+              icon: "success",
+              showConfirmButton: false,
+              timer: 1500
+            });
+        } else {
+          $('#error').html(res.message);
+        }
       }
-    }
+    });
   });
-}
-);
+});
+
+
+
 
 //Upadte Group
 $('.updateGroup').click(function () {
@@ -190,7 +205,6 @@ $('.updateGroup').click(function () {
 
 $('#updateChatGroupForm').submit(function (event) {
   event.preventDefault();
-  
 
   var formData = new FormData(this);
 
@@ -203,8 +217,17 @@ $('#updateChatGroupForm').submit(function (event) {
     data: formData,
     success: function (res) {
       if (res && res.success) { 
-        alert(res.message); 
-        window.location.reload();
+        setTimeout(function() {
+          location.reload();
+            },1000);
+
+            Swal.fire({
+              title: "UPDATE!!",
+              icon: "success",
+              showConfirmButton: false,
+              timer: 1500
+            });
+       
       } else {
         $('#error').html(res ? res.message : 'Unknown error occurred');
       }
@@ -214,4 +237,61 @@ $('#updateChatGroupForm').submit(function (event) {
       $('#error').html('An error occurred while processing your request.');
     }
   });
+});
+
+
+// Delete Group
+$('.deleteGroup').click(function(){
+  $('#delete_group_id').val($(this).attr('data-id'));
+  $('#delete_group_name').text($(this).attr('data-name'));
+});
+
+$('#deleteChatGroupForm').submit(function(event){
+  event.preventDefault();
+
+  var formData = $(this).serialize();
+
+  $.ajax({
+    url:"/user/deletegroup",
+    type:"post",
+    data:formData,
+    success:function (res) {
+      if(res.success){
+        
+        setTimeout(function() {
+          location.reload();
+         },1000);
+
+          Swal.fire({
+            title: "DELETE!!",
+            icon: "success",
+            showConfirmButton: false,
+            timer: 1500
+          });
+      }
+    }
+  })
+})
+
+
+//Copy Group
+$('.copyGroup').click(function(){
+  var group_id = $(this).attr('data-id');
+  var url = window.location.host+'/share-group/'+group_id;
+  
+  var temp = $("<input>");
+  $("body").append(temp);
+  
+  temp.val(url).select();
+  document.execCommand("copy");
+  
+  temp.remove();
+  setTimeout(function() {
+    Swal.fire({
+      title: "Copied!",
+      icon: "success",
+      showConfirmButton: false,
+      timer: 1500
+    });
+  }, 100); // Adjust the delay time if needed
 });

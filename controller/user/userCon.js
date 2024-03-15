@@ -7,6 +7,7 @@ const jwt = require('jsonwebtoken');
 const sendMail = require("../../utils/mail");
 const fs = require("fs");
 const path = require("path");
+const { group } = require('console');
 const { ObjectId } = require('mongoose').Types;
 
 // -------------------------- SIGN --------------------------
@@ -30,8 +31,8 @@ const signUp = async (req, res) => {
       return res.redirect('/user/signup');
     }
 
-    if (password.length < 8) {
-      req.flash('error', 'Password must be at least 8 characters long');
+    if (password.length <= 6) {
+      req.flash('error', 'Password must be at least 6 characters long');
       return res.redirect('/user/signup');
     }
 
@@ -446,16 +447,15 @@ const createGroup = async (req, res) => {
     const creator_id = req.user._id;
     const photo = req.file.filename;
 
-    const groups = new Group({
+    const group = new Group({
       creator_id,
       name,
       photo,
       limit,
     });
 
-    await groups.save();
+    await group.save();
 
-    const group = await Group.find({ creator_id: req.user._id });
     req.flash('success', 'Group created successfully.');
     res.redirect('/user/group' , { data: req.user, group: group});
   } catch (error) {
@@ -509,8 +509,8 @@ const getMember = async (req, res) => {
 const addMember = async (req, res) => {
   try {
     const { members, limit, group_id } = req.body;
-
-    if (!members || members.length == 0) {
+  
+    if (!members) {
       return res.status(400).send({ success: false, message: "Please select at least one member." });
     }
 
@@ -535,7 +535,6 @@ const addMember = async (req, res) => {
 // -------------------------- UPDATE GROUP -------------------------
 const updateGroup = async (req, res) => {
   try {
-    // Validate input
     const limit = parseInt(req.body.limit);
     const lastLimit = parseInt(req.body.last_limit);
     const groupId = req.body.id;
@@ -544,12 +543,10 @@ const updateGroup = async (req, res) => {
       throw new Error('Invalid input parameters');
     }
 
-    // Check if limit decreased, delete members if necessary
     if (limit < lastLimit) {
       await Member.deleteMany({ group_id: groupId });  
     }
 
-    // Prepare update object
     const updateObj = {
       name: req.body.name,
       limit: limit
@@ -559,17 +556,47 @@ const updateGroup = async (req, res) => {
       updateObj.photo = req.file.filename;
     }
 
-    // Update group
     await Group.findByIdAndUpdate(groupId, updateObj);
-
-    req.flash('success', 'Group updated successfully.');
-    return res.redirect('/user/group');
+    res.status(200).send({ success: true, message: "Update successfully." });
+    
   } catch (error) {
     console.error('Error updating group:', error);
     req.flash('error', 'Error updating group.');
     return res.redirect('/user/group');
   }
 };
+
+
+//------------------------- DELETE GROUP --------------------------
+const deleteGroup = async (req, res) => {
+  try{
+    await Group.deleteOne({_id:req.body.id})
+    await Member.deleteMany({group_id:req.body.id});
+
+    res.status(200).send({ success: true, message: "Delete successfully." });
+  }catch(error){
+    console.error('Error deleting group:', error);
+    req.flash('error', 'Error deleting group.');
+    return res.redirect('/user/group');
+  }
+}
+
+
+//------------------------- SHARE GROUP ---------------------------
+const shareGroup = async (req,res) =>{
+  try{
+
+    var groupData = await  Group.findOne({ _id : req.params.id});
+
+    if(!groupData){
+      
+    }
+
+  }catch(error){
+
+  }
+}
+
 
 
 module.exports = {
@@ -597,6 +624,8 @@ module.exports = {
     createGroup,
     getMember,
     addMember,
-    updateGroup
+    updateGroup,
+    deleteGroup,
+    shareGroup
 }
 

@@ -29,8 +29,8 @@ app.use(
     cookie: { maxAge: 30 * 86400 * 1000 },
   })
 );
-app.use(flash());
 
+app.use(flash());
 app.use(cookieParser());
 app.use(express.static('public'));
 app.use(express.json());
@@ -46,6 +46,8 @@ app.use('/admin', adminRouter)
 app.use('/user', userRouter)
 app.use('/',userRouter)
 
+
+
 //------------------- SOKCET -------------------
 const io = socketIO(server);
 let usp = io.of("/user");
@@ -59,6 +61,7 @@ usp.on("connection", async (socket) => {
   );
 
   socket.broadcast.emit("getOnlineUser", { userId: userId });
+
   socket.on("disconnect", async () => {
     console.log("User Diconnected");
     let userId = socket.handshake.auth.token;

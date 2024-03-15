@@ -18,14 +18,14 @@ const authenticateToken = async (req, res, next) => {
 
     if (!admin) {
       req.flash('error', 'Invalid token');
-      return res.status(403).send('Invalid token');
+      return res.redirect('/admin/login');
     }
 
     req.token = token;
     req.photoLoc = admin.photo;
 
     if (admin.photo == "") {
-      admin.photo = `${process.env.url}/assets/upload/demo1.png`;
+      admin.photo = `${process.env.url}/assets/upload/1.png`;
     } else {
       admin.photo = `${process.env.url}/assets/upload/${admin.photo}`;
     }
@@ -37,7 +37,7 @@ const authenticateToken = async (req, res, next) => {
 
     if (err.name == 'JsonWebTokenError') {
       req.flash('error', 'Invalid token');
-      return res.status(403).send('Invalid token');
+      return res.redirect("/admin/login")
     }
 
     req.flash('error', 'Please login to continue');
@@ -61,19 +61,19 @@ const userauthenticateToken = async (req, res, next) => {
 
     if (!user) {
       req.flash('error', 'Invalid token');
-      return res.status(403).send('Invalid token');
+      return res.redirect("/user/signup")
     }
 
     req.token = token;
     req.photoLoc = user.photo;
 
-    if (user.photo === "") {
-      user.photo = `${process.env.url}/assets/upload/demo1.png`;
+    if (user.photo == "") {
+      user.photo = `${process.env.url}/assets/upload/1.png`;
     } else {
       user.photo = `${process.env.url}/assets/upload/${user.photo}`;
     }
 
-    if (user.status === "inactive") {
+    if (user.status == "inactive") {
       res.clearCookie("token");
       req.flash('error', 'Your account is inactive');
       return res.redirect('/user/login');
@@ -84,9 +84,9 @@ const userauthenticateToken = async (req, res, next) => {
   } catch (err) {
     console.error('Error in userauthenticateToken:', err);
 
-    if (err.name === 'JsonWebTokenError') {
+    if (err.name == 'JsonWebTokenError') {
       req.flash('error', 'Invalid token');
-      return res.status(403).send('Invalid token');
+      return res.redirect("/user/login");
     }
 
     req.flash('error', 'Please login to continue');

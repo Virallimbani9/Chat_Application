@@ -7,3 +7,15 @@
 .error{
     color: red;
 }
+
+.cursor-pointer {
+    cursor: pointer;
+}
+
+.updateGroup {
+    cursor: pointer;
+}
+
+.deleteGroup{
+    cursor: pointer;
+}
