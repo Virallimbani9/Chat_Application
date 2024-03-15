@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8" />
+    <title>Dashboard</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta content="Premium Multipurpose Admin & Dashboard Template" name="description" />
+    <meta content="Themesbrand" name="author" />
+    <!-- App favicon -->
+    <link rel="shortcut icon" href="/assets/images/favicon.ico">
+    
+    <!-- Bootstrap Css -->
+    <link href="/assets/css/bootstrap.min.css" id="bootstrap-style" rel="stylesheet" type="text/css" />
+    <!-- Icons Css -->
+    <link href="/assets/css/icons.min.css" rel="stylesheet" type="text/css" />
+    <!-- App Css-->
+    <link href="/assets/css/app.min.css" id="app-style" rel="stylesheet" type="text/css" />
+
+</head>
+
+<body data-sidebar="dark">
+
+    <!-- Begin page -->
+    <div id="layout-wrapper">
+
+  <%-include('../../include/header')%>
+        
+        <!-- ========== Left Sidebar Start ========== -->
+  <%-include('../../include/leftsidebar')%>
+        <!-- Left Sidebar End -->
+
+        <!-- ============================================================== -->
+        <!-- Start right Content here -->
+        <!-- ============================================================== -->
+        <div class="main-content">
+
+            <div class="page-content">
+                <div class="container-fluid">
+                    <div id="flash-messages">
+                        <% if (messages.success) { %>
+                            <div class="alert alert-success">
+                                <%= messages.success %>
+                            </div>
+                        <% } else if (messages.error) { %>
+                            <div class="alert alert-danger">
+                                <%= messages.error %>
+                            </div>
+                        <% } else if (messages.info) { %>
+                            <div class="alert alert-info">
+                                <%= messages.info %>
+                            </div>
+                        <% } %>
+                    </div>
+
+                    <!-- start page title -->
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="page-title-box">
+                                <h4>Dashboard</h4>
+                                    <ol class="breadcrumb m-0">
+                                        <li class="breadcrumb-item"><a href="javascript: void(0);">Lexa</a></li>
+                                        <li class="breadcrumb-item"><a href="/admin/index">Dashboard</a></li>
+                        
+                                    </ol>
+                            </div>
+                        </div>
+                        
+                    </div>
+                    <!-- end page title -->
+
+                    <div class="row">
+                        <div class="col-xl-3 col-md-6">
+                            <!-- Add this code where you want to display flash messages -->
+  
+                            <div class="card mini-stat bg-primary">
+                                <div class="card-body mini-stat-img">
+                                    <div class="mini-stat-icon">
+                                        <i class="mdi mdi-cube-outline float-right"></i>
+                                    </div>
+                                    <div class="text-white">
+                                        <h6 class="text-uppercase mb-3 font-size-16">Users</h6>
+                                        <h2 class="mb-4"><%= count%></h2>
+                                        <span class="ml-2">Current Admin : <%= data.name %></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>                
+                    </div>
+                    <!-- end row -->
+                    
+
+
+
+                    <%-include ("../../include/footer") %>
+                </div>
+                <!-- end main content-->
+            </div>
+            </div>
+            </div>
+                
+            <!-- JAVASCRIPT -->
+            <script src="/assets/libs/jquery/jquery.min.js"></script>
+            <script src="/assets/libs/bootstrap/js/bootstrap.bundle.min.js"></script>
+            <script src="/assets/libs/metismenu/metisMenu.min.js"></script>
+            <script src="/assets/libs/simplebar/simplebar.min.js"></script>
+            <script src="/assets/libs/node-waves/waves.min.js"></script>
+            <script src="/assets/libs/jquery-sparkline/jquery.sparkline.min.js"></script>
+
+            <!--Morris Chart-->
+            <script src="/assets/libs/morris.js/morris.min.js"></script>
+            <script src="/assets/libs/raphael/raphael.min.js"></script>
+
+            <script src="/assets/js/pages/dashboard.init.js"></script>
+
+            <!-- App js -->
+            <script src="/assets/js/app.js"></script>
+            <script>
+                // Function to hide flash messages after 3 seconds
+                setTimeout(function () {
+                    document.getElementById("flash-messages").style.display = "none";
+                }, 2000);
+            </script>
+        </div>
+</body>
+
+</html>

@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8" />
+    <title>Profile</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta content="Premium Multipurpose user & Dashboard Template" name="description" />
+    <meta content="Themesbrand" name="author" />
+    <!-- App favicon -->
+    <link rel="shortcut icon" href="/assets/images/favicon.ico">
+    
+    <!-- Bootstrap Css -->
+    <link href="/assets/css/bootstrap.min.css" id="bootstrap-style" rel="stylesheet" type="text/css" />
+    <!-- Icons Css -->
+    <link href="/assets/css/icons.min.css" rel="stylesheet" type="text/css" />
+    <!-- App Css-->
+    <link href="/assets/css/app.min.css" id="app-style" rel="stylesheet" type="text/css" />
+
+</head>
+
+<body data-sidebar="dark">
+
+    <!-- Begin page -->
+    <div id="layout-wrapper">
+
+  <%-include('./include/header')%>
+        
+        <!-- ========== Left Sidebar Start ========== -->
+  <%-include('./include/leftsidebar')%>
+        <!-- Left Sidebar End -->
+
+        <!-- ============================================================== -->
+        <!-- Start right Content here -->
+        <!-- ============================================================== -->
+        <div class="main-content">
+
+            <div class="page-content">
+                <div class="container-fluid">
+                  <div id="flash-messages">
+                    <% if (messages.success) { %>
+                        <div class="alert alert-success">
+                            <%= messages.success %>
+                        </div>
+                    <% } else if (messages.error) { %>
+                        <div class="alert alert-danger">
+                            <%= messages.error %>
+                        </div>
+                    <% } else if (messages.info) { %>
+                        <div class="alert alert-info">
+                            <%= messages.info %>
+                        </div>
+                    <% } %>
+                </div>
+                    <div class="main-body">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="page-title-box">
+                                    <h4>Profile</h4>
+                                        <ol class="breadcrumb m-0">
+                                            <li class="breadcrumb-item"><a href="/user/index">Dashboard</a></li>
+                                            <li class="breadcrumb-item"><a href="/user/profile">Profile</a></li>
+                                            <!-- <li class="breadcrumb-item active">Profile</li> -->
+                                        </ol>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row gutters-sm">
+                          <div class="col-md-4 mb-3">
+                            <div class="card" style="height: 95%;">
+                              <div class="card-body">
+                                <div class="d-flex flex-column align-items-center text-center">
+                                  <img src="<%=data.photo%>" alt="user" class="rounded" width="60%">
+                                  <div class="mt-8" style="margin-top: 5%;">
+                                    <h4><%=data.name%></h4>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          
+                          <div class="col-md-8">
+                            <div class="card mb-3">
+                              <div class="card-body">
+                                <div class="row">
+                                  <div class="col-sm-3">
+                                    <h6 class="mb-0">Full Name</h6>
+                                  </div>
+                                  <div class="col-sm-9 text-secondary">
+                                    <%=data.name%>
+                                  </div>
+                                </div>
+                                <hr>
+                                <div class="row">
+                                  <div class="col-sm-3">
+                                    <h6 class="mb-0">Email</h6>
+                                  </div>
+                                  <div class="col-sm-9 text-secondary">
+                                    <%=data.email%>
+                                  </div>
+                                </div>
+                                <hr>
+                                <div class="row">
+                                  <div class="col-sm-3">
+                                    <h6 class="mb-0">Phone</h6>
+                                  </div>
+                                  <div class="col-sm-9 text-secondary">
+                                    <%=data.phone%>
+                                  </div>
+                                </div>
+                                <hr>
+                                <div class="row">
+                                  <div class="col-sm-3">
+                                    <h6 class="mb-0">City</h6>
+                                  </div>
+                                  <div class="col-sm-9 text-secondary">
+                                    <%=data.city%>
+                                  </div>
+                                </div>
+                                <hr>
+                                <div class="row">
+                                  <div class="col-sm-3">
+                                    <h6 class="mb-0">Gender</h6>
+                                  </div>
+                                  <div class="col-sm-9 text-secondary">
+                                    <%=data.gender%>
+                                  </div>
+                                </div>
+                                <hr>
+                                <div class="row" style="display: flex;">
+                                  <div class="col-sm-12">
+                                    <a class="btn btn-info"  href="/user/updateprofile">Edit</a>
+                                  </div>
+                                  <div class="col-sm-12">
+                                    <a class="btn btn-info" style="margin-top: 10px;" href="/user/changepassword">Change Password</a>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+              
+                      </div>
+
+                    <%-include ("./include/footer") %>
+                </div>
+                <!-- end main content-->
+
+            </div>
+            <!-- END layout-wrapper -->
+
+            <!-- JAVASCRIPT -->
+            <script src="/assets/libs/jquery/jquery.min.js"></script>
+            <script src="/assets/libs/bootstrap/js/bootstrap.bundle.min.js"></script>
+            <script src="/assets/libs/metismenu/metisMenu.min.js"></script>
+            <script src="/assets/libs/simplebar/simplebar.min.js"></script>
+            <script src="/assets/libs/node-waves/waves.min.js"></script>
+            <script src="/assets/libs/jquery-sparkline/jquery.sparkline.min.js"></script>
+
+            <!--Morris Chart-->
+            <script src="/assets/libs/morris.js/morris.min.js"></script>
+            <script src="/assets/libs/raphael/raphael.min.js"></script>
+
+            <script src="/assets/js/pages/dashboard.init.js"></script>
+
+            <!-- App js -->
+            <script src="/assets/js/app.js"></script>
+            <script>
+              setTimeout(function () {
+                  document.getElementById("flash-messages").style.display = "none";
+              }, 2000);
+          </script>
+</body>
+
+</html>

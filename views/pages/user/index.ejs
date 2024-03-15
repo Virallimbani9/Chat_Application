@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Dashboard</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      content="Premium Multipurpose Admin & Dashboard Template"
+      name="description" />
+    <meta content="Themesbrand" name="author" />
+    <!-- App favicon -->
+    <link rel="shortcut icon" href="/assets/images/favicon.ico" />
+
+    <!-- Bootstrap Css -->
+    <link
+      href="/assets/css/bootstrap.min.css"
+      id="bootstrap-style"
+      rel="stylesheet"
+      type="text/css" />
+    <!-- Icons Css -->
+    <link href="/assets/css/icons.min.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha384-gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <!-- App Css-->
+    <link
+      href="/assets/css/app.min.css"
+      id="app-style"
+      rel="stylesheet"
+      type="text/css" />
+
+      <link rel="stylesheet" href="/assets/css/index.css">
+  </head>
+
+  <body data-sidebar="dark">
+    <!-- Begin page -->
+
+    <!-- header Section -->
+
+    <%- include('./include/header') %>
+
+    <!-- ========== Left Sidebar Start ========== -->
+    <%- include('./include/leftsidebar') %>
+    <!-- Left Sidebar End -->
+
+    <!-- ============================================================== -->
+    <!-- Start right Content here -->
+    <!-- ============================================================== -->
+    <div class="main-content">
+      <div class="page-content">
+        <div class="container-fluid">
+          <div id="flash-messages">
+            <% if (messages.success) { %>
+                <div class="alert alert-success">
+                    <%= messages.success %>
+                </div>
+            <% } else if (messages.error) { %>
+                <div class="alert alert-danger">
+                    <%= messages.error %>
+                </div>
+            <% } else if (messages.info) { %>
+                <div class="alert alert-info">
+                    <%= messages.info %>
+                </div>
+            <% } %>
+        </div>
+          <!-- start page title -->
+          <div class="row">
+            <div class="col-sm-6">
+              <div class="page-title-box">
+                <h4>User Dashboard</h4>
+                <ol class="breadcrumb m-0">
+                  <li class="breadcrumb-item">
+                    <a href="javascript: void(0);">Lexa</a>
+                  </li>
+                  <li class="breadcrumb-item">
+                    <a href="javascript: void(0);">Chat Section</a>
+                  </li>
+                  <li class="breadcrumb-item active">Chat Section</li>
+                </ol>
+              </div>
+            </div>
+          </div>
+          <!-- end page title -->
+
+          <div class="row">
+            <div class="col-xl-3 col-md-6">
+              <div class="card mini-stat badge-dark">
+                <div class="card-body mini-stat-img">
+                  <div class="text-white">
+                    <h6 class="text-uppercase mb-3 font-size-16">User Name</h6>
+                    <h5><%=data.name %></h5>
+                  </div>
+                </div>
+              </div>
+              <div class="card mini-stat bg-primary">
+                <div class="card-body mini-stat-img">
+                  <div class="text-white">
+                    <% users.forEach((users)=> { %>
+                        <% if(users.status=="active") {%>
+                    <li
+                      style="list-style-type: none; cursor: pointer"
+                      class="mb-4 user-list"
+                      data-id="<%=users._id %>">
+                      <img
+                        src="/assets/upload/<%=users.photo %>"
+                        height="50px"
+                        width="50px"
+                        alt />
+                      <%=users.name %> <% if(users.is_online==true) {%>
+                      <sup class="status1 blink"
+                        id="<%=users._id %>-status"><i style='font-size:18px;color: green;' class='far'>&#xf4ad;</i>
+                      </sup>
+                      <% } else {%>
+                      <sup class="status2 blink"
+                        id="<%=users._id %>-status"><i style='font-size:15px;color:red' class='fas'>&#xf4b3;</i>
+                      </sup>
+                      <% } %>
+                    </li>
+                    <% } %>
+                    <hr style="background-color: white" />
+                    <% }); %>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-xl-8 col-md-5">
+              <h5 class="chat-text" style="text-align: center">
+                Click Person name Too chat
+              </h5>
+              <div class="card mini-stat chat-section">
+                <div class="card-body mini-stat-img">
+                  <div class="text-black">
+                    <!-- <h2 class="mb-4">$46,782</h2> -->
+                    <div class="chat" id="chat-container"></div>
+                    <br/>
+                    <form action id="chat-form">
+                      <div class="d-flex flex-row">
+                        <input
+                          style="width: 80%"
+                          type="text"
+                          name="message"
+                          placeholder="Enter message"
+                          id="message"
+                          required />
+                        <button
+                          class="btn btn-success w-md waves-effect waves-light"
+                          style="margin-left: 30px !important; width: 20%"
+                          type="submit">
+                          Send message
+                        </button>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- end row -->
+
+          <%- include('./include/footer') %>
+        </div>
+        <!-- end main content-->
+      </div>
+      <!-- END layout-wrapper -->
+    </div>
+
+
+    <!-- JAVASCRIPT -->
+    <script src="/assets/libs/jquery/jquery.min.js"></script>
+    <script src="/assets/libs/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="/assets/libs/metismenu/metisMenu.min.js"></script>
+    <script src="/assets/js/app.js"></script>
+    
+  </body>
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="https://cdn.socket.io/4.4.1/socket.io.js"></script>
+  <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+  <script>
+    setTimeout(function () {
+        document.getElementById("flash-messages").style.display = "none";
+    }, 2000);
+</script>
+<script src="/assets/js/socket.js"></script>
+
+</html>

@@ -1,0 +1,62 @@
+.chat {
+    border: 1px solid black;
+    background-image: url("/assets/images/bg-img-1.jpg");
+    background-color: black;
+    height: 400px;
+    width: 100%;
+    overflow: scroll;
+    color: white;
+    border: 1px sloid;
+}
+
+.chat-section {
+    border: 1px solid black;
+    display: none;
+}
+
+.status2 {
+    color: red;
+    font-size: 15px;
+    font-weight: 500;
+}
+
+.status1 {
+    color: green;
+    font-size: 15px;
+    font-weight: 500;
+}
+
+.chatMain {
+    display: flex;
+    width: 100%;
+    justify-content: flex-end;
+}
+
+.chatMain1 {
+    display: flex;
+    width: 100%;
+    justify-content: flex-start;
+}
+
+.current-user-chat {
+    /* background: #806cbc; */
+    text-align: right;
+    border-radius: 5px;
+    padding-left: 3px;
+    padding-right: 3px;
+    width: auto;
+    margin: 10px;
+    font-size: 14px;
+}
+
+.distance-user-chat {
+    /* color: black; */
+    /* background-color: rgb(227, 224, 224); */
+    text-align: left;
+    border-radius: 5px;
+    width: auto;
+    margin: 10px;
+    padding-left: 3px;
+    padding-right: 3px;
+    font-size: 14px;
+}

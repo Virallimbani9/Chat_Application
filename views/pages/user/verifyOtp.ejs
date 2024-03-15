@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8" />
+    <title>Verify OTP</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta content="Premium Multipurpose Admin & Dashboard Template" name="description" />
+    <meta content="Themesbrand" name="author" />
+    <!-- App favicon -->
+    <link rel="shortcut icon" href="/assets/images/favicon.ico"> 
+    
+    <!-- Bootstrap Css -->
+    <link href="/assets/css/bootstrap.min.css" id="bootstrap-style" rel="stylesheet" type="text/css" />
+    <!-- Icons Css -->
+    <link href="/assets/css/icons.min.css" rel="stylesheet" type="text/css" />
+    <!-- App Css-->
+    <link href="/assets/css/app.min.css" id="app-style" rel="stylesheet" type="text/css" />
+
+</head>
+
+<body>
+    <div class="account-pages my-5 pt-sm-5">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-8 col-lg-6 col-xl-5">
+                    <div id="flash-messages">
+                        <% if (messages.success) { %>
+                            <div class="alert alert-success">
+                                <%= messages.success %>
+                            </div>
+                        <% } else if (messages.error) { %>
+                            <div class="alert alert-danger">
+                                <%= messages.error %>
+                            </div>
+                        <% } else if (messages.info) { %>
+                            <div class="alert alert-info">
+                                <%= messages.info %>
+                            </div>
+                        <% } %>
+                    </div>
+                    <div class="card overflow-hidden">
+                        <div class="card-body pt-0">
+                            <h3 class="text-center mt-4">
+                                <a href="index.html" class="logo logo-admin"><img src="/assets/images/logo-dark.png"
+                                        height="90" alt="logo"></a>
+                            </h3>
+                            <div class="p-3">
+                                <h4 class="text-muted font-size-18 mb-3 text-center">Hii.. <%=user.name%></h4>
+                                <h4 class="text-muted font-size-18 mb-3 text-center">OTP Verify</h4>
+                                
+                                <div class="alert alert-info" role="alert">
+                                    Enter your OTP
+                                </div>
+                                <form class="form-horizontal mt-4"  action="/user/verifyotp" method="post">
+
+                                    <div class="form-group">
+                                        <label for="userOtp">OTP</label>
+                                        <input type="otp" class="form-control" id="userOtp" placeholder="Enter OTP" name="otp">
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <div class="col-12 text-right">
+                                            <button class="btn btn-primary w-md waves-effect waves-light" type="submit">Login</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-5 text-center">
+                        <!-- <p>All Ready Verify ? <a href="/user/login" class="text-primary"> Log In Here </a> </p> -->
+                        <p>© 2018 - 2020 Lexa. Crafted with <i class="mdi mdi-heart text-danger"></i> by Themesbrand</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT -->
+    <script src="/assets/libs/jquery/jquery.min.js"></script>
+    <script src="/assets/libs/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="/assets/libs/metismenu/metisMenu.min.js"></script>
+    <script src="/assets/libs/simplebar/simplebar.min.js"></script>
+    <script src="/assets/libs/node-waves/waves.min.js"></script>
+    <script src="/assets/libs/jquery-sparkline/jquery.sparkline.min.js"></script>
+    <!-- App js -->
+    <script src="/assets/js/app.js"></script>
+    <script>
+        setTimeout(function () {
+            document.getElementById("flash-messages").style.display = "none";
+        }, 2000);
+    </script>
+</body>
+
+</html>

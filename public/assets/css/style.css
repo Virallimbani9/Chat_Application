@@ -1,0 +1,9 @@
+.addMemberTable{
+    overflow-y: scroll;
+    height: 200px;
+    width: 100%;
+}
+
+.error{
+    color: red;
+}
