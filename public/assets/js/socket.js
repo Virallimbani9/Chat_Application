@@ -122,7 +122,6 @@ function scrollChat() {
 
 // Add Member
 $('.addMember').click(function () {
-  console.log("call")
   var id = $(this).attr('data-id');
   var limit = $(this).attr('data-limit');
 
