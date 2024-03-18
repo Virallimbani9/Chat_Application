@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Group Chat</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      content="Premium Multipurpose Admin & Dashboard Template"
+      name="description" />
+    <meta content="Themesbrand" name="author" />
+    <!-- App favicon -->
+    <link rel="shortcut icon" href="/assets/images/favicon.ico" />
+
+    <!-- Bootstrap Css -->
+    <link
+      href="/assets/css/bootstrap.min.css"
+      id="bootstrap-style"
+      rel="stylesheet"
+      type="text/css" />
+    <!-- Icons Css -->
+    <link href="/assets/css/icons.min.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha384-gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    
+
+    <!-- App Css-->
+    <link
+      href="/assets/css/app.min.css"
+      id="app-style"
+      rel="stylesheet"
+      type="text/css" />
+
+      <link rel="stylesheet" href="/assets/css/index.css">
+  </head>
+
+  <body data-sidebar="dark">
+    <!-- Begin page -->
+
+    <!-- header Section -->
+
+    <%- include('./include/header') %>
+
+    <!-- ========== Left Sidebar Start ========== -->
+    <%- include('./include/leftsidebar') %>
+    <!-- Left Sidebar End -->
+
+    <!-- ============================================================== -->
+    <!-- Start right Content here -->
+    <!-- ============================================================== -->
+    <div class="main-content">
+      <div class="page-content">
+        <div>
+            <img src="/assets/upload/<%= group.photo%>" alt="" style="height: 200px; width: 200px;">
+            <p><b><%= group.name%></b></p>
+            <p><b>Total Member : </b><%= totalMember %></p>
+            
+            <%
+            if(available != 0 ){
+              %>
+              <p><b>Available : </b>Only <b><%=available%></b> Member Available Now!!</p>
+              <%
+            }
+
+            if(isOwner){
+              %>
+              <p><b>You Are The Owner!!!!</b></p>
+              <%
+            }else if(isJoined > 0){
+              %>
+              <p><b>You Are Already joined!!!! </b></p>
+              <%
+            }else if(available == 0){
+              %>
+              <p><b>Group Is Full!!!! </b></p>
+              <%
+            } else{
+              %>
+              <button class="btn btn-primary join-now" data-id="<%= group._id%>">Join Now</button>
+              <%
+            }
+            %>
+        </div>
+        <%-include ("./include/footer") %>
+        <!-- end main content-->
+      </div>
+      <!-- END layout-wrapper -->
+    </div>
+
+
+    <!-- JAVASCRIPT -->
+    <script src="/assets/libs/jquery/jquery.min.js"></script>
+    <script src="/assets/libs/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="/assets/libs/metismenu/metisMenu.min.js"></script>
+    <script src="/assets/js/app.js"></script>
+    
+  </body>
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="https://cdn.socket.io/4.4.1/socket.io.js"></script>
+  <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script src="/assets/js/socket.js"></script>
+
+</html>

@@ -63,7 +63,13 @@ router.post('/updategroup',userauthenticateToken,upload.single('photo'),userCon.
 router.post("/deletegroup", userauthenticateToken , userCon.deleteGroup);
 
 // ------------------------------ SHARE GROUP ------------------------
-router.get("/share-group/:id",userCon.shareGroup)
+router.get("/share-group/:id",userauthenticateToken,userCon.shareGroup)
+
+//------------------------------- JOIN GROUP --------------------------
+router.post("/join-group",userauthenticateToken,userCon.joinGroup)
+
+//-------------------------------- GROUP CHAT -------------------------
+router.get("/group-chat",userauthenticateToken,userCon.getGroupChat)
 
 
 module.exports=router

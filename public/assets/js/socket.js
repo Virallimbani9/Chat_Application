@@ -189,8 +189,6 @@ $(document).ready(function() {
 });
 
 
-
-
 //Upadte Group
 $('.updateGroup').click(function () {
   var obj = JSON.parse($(this).attr('data-obj'));
@@ -293,4 +291,47 @@ $('.copyGroup').click(function(){
       timer: 1500
     });
   }, 100); // Adjust the delay time if needed
+});
+
+
+//Join Group
+$('.join-now').click(function () {
+  $(this).text('Wait.....!');
+  $(this).attr('disabled', 'true');
+
+  var group_id = $(this).attr('data-id');
+  $.ajax({
+    url:'/user/join-group',
+    type:'post',
+    data:{group_id:group_id},
+    success:function(res){
+      if(res.success){
+        setTimeout(function() {
+          location.reload();
+            },1000);
+            Swal.fire({
+              title: "JOINED!!",
+              icon: "success",
+              showConfirmButton: false,
+              timer: 1500
+            });
+      }else{
+        alert(res.message);
+        $(this).text('Join Now')
+        $(this).removeattr('disabled');
+      }
+    }
+
+  })
+});
+
+
+//Group Chat
+$(document).ready(function () {
+  $(".group-list").click(function () {
+    let user_id = $(this).attr("data-id");
+    receiver_id = user_id;
+    $(".group-chat-text").hide();
+    $(".group-chat-section").show();
+    });
 });

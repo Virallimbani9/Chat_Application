@@ -60,3 +60,21 @@
     padding-right: 3px;
     font-size: 14px;
 }
+
+
+/*-------------------------------- GROUP CHAT -------------------------*/
+.group-chat {
+    border: 1px solid black;
+    background-image: url("/assets/images/bg-img-1.jpg");
+    background-color: black;
+    height: 400px;
+    width: 100%;
+    overflow: scroll;
+    color: white;
+    border: 1px sloid;
+}
+
+.group-chat-section {
+    border: 1px solid black;
+    display: none;
+}

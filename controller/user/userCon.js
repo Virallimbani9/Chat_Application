@@ -583,17 +583,58 @@ const deleteGroup = async (req, res) => {
 
 
 //------------------------- SHARE GROUP ---------------------------
-const shareGroup = async (req,res) =>{
-  try{
+const shareGroup = async (req, res) => {
+  try {
+    var groupData = await Group.findOne({ _id: req.params.id });
+    var data = req.user;
+    
+    if (!groupData) {
+      res.render('pages/user/error', { message: "No such group exists!" });
+    } else if (req.user === undefined) {
+      res.render('pages/user/error', { message: 'Please login to continue!' });
+    } else {
 
-    var groupData = await  Group.findOne({ _id : req.params.id});
+      var totalMember = await Member.find({ group_id: req.params.id }).countDocuments();
+      var available = groupData.limit - totalMember;
+      var isOwner = groupData.creator_id.toString() === req.user._id.toString();
+      var isJoined = await Member.find({ group_id: req.params.id, user_id: req.user._id }).countDocuments();
 
-    if(!groupData){
-      
+      res.render('pages/user/shareLink', { group: groupData, totalMember: totalMember, available: available, isOwner: isOwner, isJoined: isJoined, data: data });
     }
+  } catch (error) {
+    console.log(error.message);
+    res.status(500).json({ success: false, message: "Server Error!" });
+  }
+}
 
+
+//------------------------- JOIN GROUP -----------------------------
+const joinGroup = async (req ,res) =>{
+  try{
+    const member = new Member({
+      group_id:req.body.group_id,
+      user_id:req.user._id
+    })
+    await member.save();
+    res.status(200).send({success:true,message:'JOIN!!!!!!!!!!!!!!!'})
   }catch(error){
+    console.log(error.message);
+    res.status(500).json({ success: false, message: "Server Error!" });
+  }
+}
 
+
+//-------------------------------- GROUP CHAT -----------------------
+const getGroupChat = async (req,res) =>{
+  try{
+    var data = req.user;
+    const myGroup = await Group.find({creator_id: req.user._id})
+    const joinedGroup = await  Member.find({user_id : req.user._id}).populate("group_id");
+
+    res.render('pages/user/groupChat',{myGroup:myGroup,joinedGroup:joinedGroup,data:data});
+  }catch(error){
+    console.log(error.message);
+    res.status(500).json({ success: false, message: "Server Error!" });
   }
 }
 
@@ -626,6 +667,8 @@ module.exports = {
     addMember,
     updateGroup,
     deleteGroup,
-    shareGroup
+    shareGroup,
+    joinGroup,
+    getGroupChat
 }
 
