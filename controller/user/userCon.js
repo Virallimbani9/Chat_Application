@@ -2,6 +2,7 @@ const User = require('../../model/user/user');
 const Chat = require('../../model/user/chat');
 const Group = require('../../model/user/group');
 const Member = require('../../model/user/member');
+const GroupChat = require('../../model/user/groupChat');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const sendMail = require("../../utils/mail");
@@ -639,6 +640,44 @@ const getGroupChat = async (req,res) =>{
 }
 
 
+//--------------------------------- GROUP CHAT SAVE -----------------
+const groupChatSave = async (req,res) =>{
+  try{
+
+    const chat = new GroupChat({
+      sender_id : req.body. sender_id,
+      group_id : req.body.group_id,
+      message : req.body.message
+    })
+
+    var newChat = await chat.save();
+
+
+    res.status(200).send({success:true,message:'Chat Save SuccessFully',chat:newChat});
+  }catch(error){
+    console.log(error.message);
+    res.status(500).json({ success: false, message: "Server Error!" });
+  }
+}
+
+
+//----------------------------------- LOAD GROUP CHAT ---------------
+const loadGroupChats = async (req, res) => {
+  try {
+    const groupChat = await GroupChat.find({ group_id: req.body.group_id });
+    if (!groupChat) {
+      return res.status(404).json({ success: false, message: "Group chat not found!" });
+    }
+
+    res.status(200).json({ success: true, message: "Chat loaded successfully", chats: groupChat });
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).json({ success: false, message: "Server Error!" });
+  }
+}
+
+
+
 
 module.exports = {
     index,
@@ -669,6 +708,8 @@ module.exports = {
     deleteGroup,
     shareGroup,
     joinGroup,
-    getGroupChat
+    getGroupChat,
+    groupChatSave,
+    loadGroupChats
 }
 

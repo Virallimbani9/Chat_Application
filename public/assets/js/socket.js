@@ -15,6 +15,7 @@ let userData = JSON.parse(getCookie("user"));
   
 let sender_id = userData._id;
 let receiver_id;
+var global_group_id;
 let socket = io("/user", {
   auth: {
     token: userData._id,
@@ -64,14 +65,14 @@ $("#chat-form").submit(function (event) {
       },
       success: function (res) {
         if (res.success) {
-          $("#message").val("");
-          let chat = res.data.message;
-          let html = ` <div class="current-user-chat">` + chat + `</div>`;
-          $("#chat-container").append(html);
-          socket.emit("newChat", res.data);
+          $("#group-message").val("");
+          let message = res.chat.message;
+          let html = ` <div class="current-user-chat" id='`+res.chat._id+`'>` + message + `</div>`;
+          $("#group-chat-container").append(html);
+          socket.emit("newGroupChat", res.chat);
           scrollChat();
         } else {
-          alert("else called", data.msg);
+          alert("else called", chat.msg);
         }
       },
     });
@@ -121,7 +122,7 @@ function scrollChat() {
   
 
 // Add Member
-$('.addMember').click(function () {
+$('.addMember').click(function () { 
   var id = $(this).attr('data-id');
   var limit = $(this).attr('data-limit');
 
@@ -141,7 +142,7 @@ $('.addMember').click(function () {
         for (var i = 0; i < users.length; i++) {
           
           let isMemberOfGroup = users[i]['member'].length > 0?true:false;
-
+          
           html += `
           <tr>
               <td><input type="checkbox" `+(isMemberOfGroup?'checked':'')+` name="members" value="`+users[i]['_id']+`"></td>
@@ -327,11 +328,107 @@ $('.join-now').click(function () {
 
 
 //Group Chat
+function scrollGroupChat() {
+  $("#group-chat-container").animate(
+    {
+      scrollTop:
+        $("#group-chat-container").offset().top +
+        $("#group-chat-container")[0].scrollHeight,
+    },
+    0
+  );
+}
+
+
+
 $(document).ready(function () {
   $(".group-list").click(function () {
-    let user_id = $(this).attr("data-id");
-    receiver_id = user_id;
     $(".group-chat-text").hide();
     $(".group-chat-section").show();
+
+    global_group_id = $(this).attr("data-id");
+    loadGroupChats()
     });
 });
+
+
+
+
+// Chats
+$("#group-chat-form").submit(function (event) {
+  event.preventDefault();
+  let message = $("#group-message").val();
+  $.ajax({
+    url: "/user/group-chat-save",
+    type: "POST",
+    data: {
+      sender_id: sender_id,
+      group_id:global_group_id,
+      message: message,
+    },
+    success: function (res) {
+      
+      if (res.success) {
+        
+       $("#group-message").val("");
+       let message = res.chat.message;
+   
+       let html = ` <div class="current-user-chat" id="`+ res.chat_id +`">` + message + `</div>`;
+       $("#group-chat-container").append(html);
+       socket.emit("newGroupChat", res.chat);
+      } else {
+        alert("called", chat.message);
+      }
+    },
+  });
+});
+
+
+// load Group Chat
+socket.on("loadNewGroupChat", (data) => { 
+
+  // console.log(global_group_id);
+  // console.log(data.group_id) 
+  if (global_group_id == data.group_id) {
+    
+    let html = `<div class="distance-user-chat" id="${data._id}">${data.message}</div>`;
+    $("#group-chat-container").append(html);
+    scrollGroupChat() 
+  } else {
+    console.log("Received chat message for a different group:", data);
+  }
+});
+
+
+//------------load old Group chats----------//
+function loadGroupChats()
+{
+  $.ajax({
+    url:"/user/load-group-chat",
+    type:"post",
+    data:{group_id:global_group_id},
+    success:function(res){
+      if(res.success){
+        
+        let chats = res.chats;
+        let html = "";
+        console.log(chats)
+
+        for (let i = 0; i < chats.length; i++) {
+        let addClass = "distance-user-chat";
+  
+        if (chats[i]["sender_id"] == sender_id) {
+          addClass = "current-user-chat";
+        } 
+
+        html += ` <div class="` + addClass + `" id="`+ chats[i]["_id"] +`">` + chats[i]["message"] + `</div>`;
+     }
+       $("#group-chat-container").append(html);
+       scrollGroupChat()
+
+      }else{
+        alert(res.message);
+      }
+    }
+  })
+}

@@ -71,5 +71,11 @@ router.post("/join-group",userauthenticateToken,userCon.joinGroup)
 //-------------------------------- GROUP CHAT -------------------------
 router.get("/group-chat",userauthenticateToken,userCon.getGroupChat)
 
+//---------------------------------- GROUP CHAT SAVE ------------------
+router.post("/group-chat-save",userauthenticateToken,userCon.groupChatSave)
+
+//---------------------------------- LOAD GROUP CHAT-------------------
+router.post("/load-group-chat" ,userauthenticateToken,userCon.loadGroupChats) 
+
 
 module.exports=router

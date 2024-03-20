@@ -1,6 +1,6 @@
 .chat {
     border: 1px solid black;
-    background-image: url("/assets/images/bg-img-1.jpg");
+    /* background-image: url("/assets/images/bg-img-1.jpg"); */
     background-color: black;
     height: 400px;
     width: 100%;
@@ -65,7 +65,7 @@
 /*-------------------------------- GROUP CHAT -------------------------*/
 .group-chat {
     border: 1px solid black;
-    background-image: url("/assets/images/bg-img-1.jpg");
+    /* background-image: url("/assets/images/bg-img-1.jpg"); */
     background-color: black;
     height: 400px;
     width: 100%;

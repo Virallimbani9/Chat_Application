@@ -92,7 +92,19 @@ usp.on("connection", async (socket) => {
     });
     socket.emit("loadChats", { chats: chats });
   });
+
+
+  //--------------- Group Chat -------------
+socket.on("newGroupChat", (data) => {
+    // console.log(data.group_id)
+    // console.log(global_group_id)
+    socket.broadcast.emit("loadNewGroupChat",data);
 });
+
+});
+
+
+
 
 server.listen(port, () => console.log("Ready to go!"))
 
