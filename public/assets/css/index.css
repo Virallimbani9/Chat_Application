@@ -1,7 +1,7 @@
 .chat {
     border: 1px solid black;
-    /* background-image: url("/assets/images/bg-img-1.jpg"); */
-    background-color: black;
+    background-image: url("/assets/images/bg-img-1.jpg");
+    /* background-color: #806cbc; */
     height: 400px;
     width: 100%;
     overflow: scroll;
@@ -39,8 +39,7 @@
 }
 
 .current-user-chat {
-    /* background: #806cbc; */
-    text-align: right;
+    background: #806cbc;
     border-radius: 5px;
     padding-left: 3px;
     padding-right: 3px;
@@ -50,9 +49,8 @@
 }
 
 .distance-user-chat {
-    /* color: black; */
-    /* background-color: rgb(227, 224, 224); */
-    text-align: left;
+    color: black;
+    background-color: rgb(227, 224, 224);
     border-radius: 5px;
     width: auto;
     margin: 10px;
