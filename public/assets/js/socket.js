@@ -64,19 +64,25 @@ $("#chat-form").submit(function (event) {
     },
     success: function (res) {
       if (res.success) {
-        $("#group-message").val("");
-        let message = res.chat.message;
+
+
+        $("#message").val("");
+        let message = res.data.message;
+        // let html =
+        //   ` <div class="current-user-chat" id='`  +
+        //   res.data._id +
+        //   `'>`  + 
+        //   message +
+        //   `</div>`;
         let html =
-          ` <div class="current-user-chat" id='` +
-          res.chat._id +
-          `'>` +
+          `<div class="chatMain"> <p class="current-user-chat">` +
           message +
-          `</div>`;
-        $("#group-chat-container").append(html);
-        socket.emit("newGroupChat", res.chat);
+          `</p></div>`;
+        $("#chat-container").append(html);
+        socket.emit("newChat", res.data);
         scrollChat();
       } else {
-        alert("else called", chat.msg);
+        alert("else called", data.msg);
       }
     },
   });
@@ -85,7 +91,11 @@ $("#chat-form").submit(function (event) {
 //---------------load chats-------------------//
 socket.on("loadNewChat", (data) => {
   if (sender_id == data.receiver_id && receiver_id == data.sender_id) {
-    let html = ` <div class="distance-user-chat">` + data.message + `</div>`;
+    // let html = ` <div class="distance-user-chat">` + data.message + `</div>`;
+    let html =
+          `<div class="chatMain1"> <p class="distance-user-chat">` +
+          data.message +
+          `</p></div>`;
     $("#chat-container").append(html);
   }
   scrollChat();
@@ -98,14 +108,24 @@ socket.on("loadChats", (data) => {
   let html = "";
   for (let i = 0; i < chats.length; i++) {
     let addClass = "";
-
-    if (chats[i]["sender_id"] == sender_id) {
-      addClass = "current-user-chat";
-    } else {
-      addClass = "distance-user-chat";
+    let addClass1 = "";
+    if (chats[i]['sender_id'] === sender_id) {
+      addClass = "current-user-chat ";
+      addClass1 = "chatMain";
     }
 
-    html += ` <div class="` + addClass + `">` + chats[i]["message"] + `</div>`;
+    else {
+      addClass = "distance-user-chat ";
+      addClass1 = "chatMain1";
+    }
+    html +=
+      ` <div class="` +
+      addClass1 +
+      `"id='` +chats[i]['_id']+ `'><img/><p class="` +
+      addClass +
+      `"id='` + chats[i]['_id'] + `'>` +
+      chats[i]["message"] +
+      `</p> </div>`;
   }
   $("#chat-container").append(html);
   scrollChat();
@@ -362,11 +382,9 @@ $("#group-chat-form").submit(function (event) {
         let message = res.chat.message;
 
         let html =
-          ` <div class="current-user-chat" id="` +
-          res.chat_id +
-          `">` +
+          `<div class="chatMain"> <p class="current-user-chat">` +
           message +
-          `</div>`;
+          `</p></div>`;
         $("#group-chat-container").append(html);
         socket.emit("newGroupChat", res.chat);
       } else {
@@ -381,7 +399,10 @@ socket.on("loadNewGroupChat", (data) => {
   // console.log(global_group_id);
   // console.log(data.group_id)
   if (global_group_id == data.group_id) {
-    let html = `<div class="distance-user-chat" id="${data._id}">${data.message}</div>`;
+    let html =
+    `<div class="chatMain1"> <p class="distance-user-chat">` +
+    data.message +
+    `</p></div>`;
     $("#group-chat-container").append(html);
     scrollGroupChat();
   } else {
@@ -402,24 +423,23 @@ function loadGroupChats() {
         console.log(chats);
 
         for (let i = 0; i < chats.length; i++) {
-          let addClass = "distance-user-chat";
-          let addClass1 = "chatMain1";
-
-          if (chats[i]["sender_id"] == sender_id) {
-            addClass = "current-user-chat";
+          let addClass = "";
+          let addClass1 = "";
+          if (chats[i]['sender_id'] === sender_id) {
+            addClass = "current-user-chat ";
             addClass1 = "chatMain";
           }
 
+          else {
+            addClass = "distance-user-chat ";
+            addClass1 = "chatMain1";
+          }
           html +=
             ` <div class="` +
             addClass1 +
-            `"id='` +
-            chats[i]["_id"] +
-            `'><img/><p class="` +
+            `"id='` +chats[i]['_id']+ `'><img/><p class="` +
             addClass +
-            `"id='` +
-            chats[i]["_id"] +
-            `'>` +
+            `"id='` + chats[i]['_id'] + `'>` +
             chats[i]["message"] +
             `</p> </div>`;
         }

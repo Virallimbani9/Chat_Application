@@ -1,7 +1,7 @@
 .chat {
     border: 1px solid black;
-    background-image: url("/assets/images/bg-img-1.jpg");
-    /* background-color: #806cbc; */
+    
+    background-color: #0b0b0c;
     height: 400px;
     width: 100%;
     overflow: scroll;
