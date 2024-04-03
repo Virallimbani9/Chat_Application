@@ -1,0 +1,11 @@
+MONGO_URI = mongodb://127.0.0.1:27017/chatApp
+SECRET_KEY= Viral9033
+url=http://localhost:3000
+user_mail=test1.capermint@gmail.com
+user_password=igfepgxstsligdrh
+service=gmail
+host=smtp.gmail.com
+PORT=587
+Security=SSL
+SE=Viral9033
+OTP_SECRET_KEY=Viral9033
