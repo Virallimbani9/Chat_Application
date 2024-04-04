@@ -136,7 +136,6 @@
                               <th style="text-align: center;">PHONE</th>
                               <th style="text-align: center;">CITY</th>
                               <th style="text-align: center;">GRNDER</th>
-                              <th style="text-align: center;">Action</th>
                               <th style="text-align: center;">STATUS</th>
                             </tr>
                           </thead>
@@ -191,13 +190,6 @@
                     {"data":'phone'},
                     {"data":'city'},
                     {"data":'gender'},
-                    {"data": null,
-                        render: function(data, type, row) {
-                          return `<div>
-                            <a href="/admin/viewuserdata/${data._id}" class="btn btn-primary"><i class="fa fa-eye"></i></a>
-                            <button value="${data._id}" class="btn btn-danger deleteBtn"><i class="mdi mdi-delete"></i></button>
-                            </div>`;
-                        }},
                         {
                             data: null,
                             render: function(data, type, row) {
@@ -211,35 +203,6 @@
                       ]
                 });
               });
-        
-              $('#dataTable').on('click', '.deleteBtn', function () {
-                const userId = $(this).val();
-                Swal.fire({
-                    title: 'Are you sure?',
-                    text: 'You won\'t be able to revert this!',
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#d33',
-                    cancelButtonColor: '#3085d6',
-                    confirmButtonText: 'Yes, delete it!'
-                }).then((result) => {
-                    if (result.isConfirmed) { 
-                        $.ajax({
-                            url: `/admin/deleteuser/${userId}`,
-                            method: 'delete',
-                            success: function () {
-                              setTimeout(function () {
-                                $('#dataTable').DataTable().ajax.reload();
-                            }, 500); 
-                                Swal.fire('Deleted!', 'User has been deleted.', 'success');
-                            },
-                            error: function () {  
-                                Swal.fire('Error!', 'Failed to delete the User.', 'error');
-                            }
-                        });
-                    }
-                });
-            });
         
               $(document).on('change', '.switch', function (e) {
                let id  = $(this).val();
