@@ -460,7 +460,7 @@ const getUserData = async (req, res) => {
 };
 
 
-// ------------------ VIEW EMPLOYEE DATA ----------------------
+// ------------------ VIEW USER DATA ----------------------
 const viewUserData = async (req, res) => {
   try {
     const data = req.admin;
@@ -570,6 +570,7 @@ const getUserGroupData = async (req, res) => {
   }
 };
 
+
 // ------------------ UPDATE STATUS ----------------------
 const updateGroupStatus = async (req, res) => {
   try {
@@ -595,12 +596,40 @@ const updateGroupStatus = async (req, res) => {
 const deleteGroup = async (req, res) => {
   try {
     await Group.deleteOne({ _id: req.params.id });
+    await Member.deleteMany({ group_id: req.params.id });
     res.json({ message: 'User deleted successfully' });
   } catch (error) {
     console.error('Error in deleteUser:', error);
     res.status(500).json({ error: 'Internal Server Error' });
   }
 };
+
+
+// ------------------ VIEW Group DATA ----------------------
+const viewUserGroupData = async (req, res) => {
+  try {
+    const data = req.admin;
+    const id = req.params.id;
+    const userdata = await Group.findById(id);
+    const creator = await User.findById({_id:userdata.creator_id})
+    const members = await Member.find({ group_id: id }).countDocuments();
+
+    if (!userdata) {
+      req.flash('error', 'User not found.');
+      return res.redirect('/admin/userGrouplist');
+    }
+
+    res.render("pages/admin/viewusergroupdata", { userdata, data ,members,creator});
+  } catch (error) {
+    console.error('Error in viewUserData:', error);
+    res.status(500).send('Internal Server Error');
+  }
+};
+
+
+
+
+
 
 
 
@@ -634,5 +663,6 @@ module.exports = {
     getusergrouplist,
     getUserGroupData,
     updateGroupStatus,
-    deleteGroup
+    deleteGroup,
+    viewUserGroupData,
 }
