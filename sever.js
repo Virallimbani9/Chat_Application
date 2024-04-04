@@ -96,11 +96,8 @@ usp.on("connection", async (socket) => {
 
   //--------------- Group Chat -------------
 socket.on("newGroupChat", (data) => {
-    // console.log(data.group_id)
-    // console.log(global_group_id)
     socket.broadcast.emit("loadNewGroupChat",data);
 });
-
 });
 
 

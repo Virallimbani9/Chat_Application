@@ -396,8 +396,7 @@ $("#group-chat-form").submit(function (event) {
 
 // load Group Chat
 socket.on("loadNewGroupChat", (data) => {
-  // console.log(global_group_id);
-  // console.log(data.group_id)
+  
   if (global_group_id == data.group_id) {
     let html =
     `<div class="chatMain1"> <p class="distance-user-chat">` +
@@ -420,7 +419,6 @@ function loadGroupChats() {
       if (res.success) {
         let chats = res.chats;
         let html = "";
-        console.log(chats);
 
         for (let i = 0; i < chats.length; i++) {
           let addClass = "";

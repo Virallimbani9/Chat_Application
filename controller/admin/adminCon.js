@@ -1,6 +1,9 @@
 const Admin = require("../../model/admin/admin");
 const User = require("../../model/user/user");
+const Group = require("../../model/user/group");
+const Member = require("../../model/user/member");
 const query = require("../../model/admin/userQuery");
+const groupQuery = require("../../model/admin/groupQuery");
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const sendMail = require("../../utils/mail");
@@ -201,8 +204,9 @@ const verifyOtp = async (req, res) => {
 const index = async (req, res) => {
   try {
     const count = await User.countDocuments();
+    const groupCount = await Group.countDocuments();
     const data = req.admin;
-    res.render('pages/admin/index', { data, count });
+    res.render('pages/admin/index', { data, count ,groupCount});
   } catch (error) {
     console.error('Error rendering admin index page:', error.message);
     req.flash('error', 'Something went wrong');
@@ -257,7 +261,7 @@ const updatedProfile = async (req, res) => {
       }
     }
 
-    const admin = await Admin.findByIdAndUpdate(req.user._id, updatedAdminData, { new: true });
+    const admin = await Admin.findByIdAndUpdate(req.admin._id, updatedAdminData, { new: true });
     await admin.save();
 
     req.flash('success', 'Profile updated successfully.');
@@ -509,6 +513,99 @@ const deleteUser = async (req, res) => {
 };
 
 
+// ------------------ GROUP ----------------------
+const getusergrouplist = async (req, res) => {
+  try {
+    const data = req.admin;
+    const userGroupdata = await Group.find();
+    res.render("pages/admin/userGrouplist", { data, userGroupdata });
+  } catch (error) {
+    console.error('Error in getUserGroupList:', error);
+    res.status(500).send('Internal Server Error');
+  }
+}
+
+const getUserGroupData = async (req, res) => {
+
+  try {
+    let data, regex;
+    const limit = parseInt(req.query.length) || 10;
+    const skip = parseInt(req.query.start) || 0;
+    const searchValue = req.query.search.value.trim();
+    regex = new RegExp(searchValue, "");
+
+    if(searchValue == ""){
+      data = await groupQuery.findData({}, {}, skip, limit);
+      const recordTotal = await groupQuery.countData({});
+      res.json({ 
+        data: data,
+        recordsTotal: recordTotal,
+        recordsFiltered: recordTotal });
+  }
+  else
+  {
+    data = await groupQuery.findData(
+      {
+        $or: [
+          { name: regex },
+          {limit: regex}
+        ],
+      },
+      {},
+      skip,
+      limit
+    );
+
+    const recordTotal = await groupQuery.countData({});
+
+    res.json({
+      data: data,
+      recordsTotal: recordTotal,
+      recordsFiltered: recordTotal,
+    });
+  }
+  } 
+  catch (error) {
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+
+// ------------------ UPDATE STATUS ----------------------
+const updateGroupStatus = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const userdata = await Group.findById(id);
+
+    if (!userdata) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    userdata.status = (userdata.status === "active") ? "inactive" : "active";
+    await userdata.save();
+
+    res.json({ userdata });
+  } catch (error) {
+    console.error('Error in updateStatus:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+
+
+// ------------------ DELETE USER ----------------------
+const deleteGroup = async (req, res) => {
+  try {
+    await Group.deleteOne({ _id: req.params.id });
+    res.json({ message: 'User deleted successfully' });
+  } catch (error) {
+    console.error('Error in deleteUser:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+
+
+
+
+
 module.exports = {
     index,
     getSignUp,
@@ -533,5 +630,9 @@ module.exports = {
     getUserData,
     viewUserData,
     updateStatus,
-    deleteUser
+    deleteUser,
+    getusergrouplist,
+    getUserGroupData,
+    updateGroupStatus,
+    deleteGroup
 }

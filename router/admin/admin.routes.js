@@ -55,6 +55,15 @@ router.post('/updatestatus/:id',authenticateToken,adminCon.updateStatus)
 // -------------------------- DELETE USER ----------------------
 router.delete('/deleteuser/:id',authenticateToken,adminCon.deleteUser)
 
+router.get('/getusergrouplist',authenticateToken,adminCon.getusergrouplist);
+router.get('/getusergroupdata',authenticateToken,adminCon.getUserGroupData)
+
+// -------------------------- UPDATE STATUS ----------------------
+router.post('/updategroupstatus/:id',authenticateToken,adminCon.updateGroupStatus)
+
+// -------------------------- DELETE USER ----------------------
+router.delete('/deletegroup/:id',authenticateToken,adminCon.deleteGroup)
+
 
 
 module.exports=router

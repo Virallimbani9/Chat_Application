@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+
+    <meta charset="utf-8" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>List</title>
+    <meta content="Premium Multipurpose Admin & Dashboard Template"
+      name="description" />
+    <meta content="Themesbrand" name="author" />
+    <!-- App favicon -->
+    <link rel="shortcut icon" href="/assets/images/favicon.ico">
+
+    <!-- Bootstrap Css -->
+    <link href="/assets/css/bootstrap.min.css" id="bootstrap-style"
+      rel="stylesheet" type="text/css" />
+    <!-- Icons Css -->
+    <link href="/assets/css/icons.min.css" rel="stylesheet" type="text/css" />
+    <!-- App Css-->
+    <link href="/assets/css/app.min.css" id="app-style" rel="stylesheet"
+      type="text/css" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css" />
+
+    <link rel="stylesheet" href="/assets/css/checkbox.css">
+
+  </head>
+
+  <body data-sidebar="dark">
+
+    <!-- Begin page -->
+    <div id="layout-wrapper">
+
+      <%-include('../../include/header')%>
+
+      <!-- ========== Left Sidebar Start ========== -->
+      <%-include('../../include/leftsidebar')%>
+      <!-- Left Sidebar End -->
+
+      <!-- ============================================================== -->
+      <!-- Start right Content here -->
+      <!-- ============================================================== -->
+      <div class="main-content">
+
+        <div class="page-content">
+          <div class="container-fluid">
+
+            <!-- start page title -->
+            <div class="row">
+              <div class="col-sm-6">
+                <div class="page-title-box">
+                  <h4>Group List</h4>
+                  <ol class="breadcrumb m-0">
+                    <li class="breadcrumb-item"><a
+                        href="javascript: void(0);">Lexa</a></li>
+                    <li class="breadcrumb-item"><a
+                        href="/user/getuserGrouplist">List</a></li>
+                  </ol>
+                </div>
+              </div>
+            </div>
+
+            <table id="dataTable" class="display" style="text-align: center;">
+              <thead>
+                <tr>
+                  <th style="text-align: center;">ID</th>
+                  <th style="text-align: center;">NAME</th>
+                  <th style="text-align: center;">IMAGE</th>
+                  <th style="text-align: center;">Member</th>
+                  <th style="text-align: center;">Action</th>
+                  <th style="text-align: center;">STATUS</th>
+                </tr>
+              </thead>
+              <!-- <tbody>
+                        </tbody> -->
+            </table>
+
+          </div>
+          <%-include ("../../include/footer") %>
+        </div>
+        <!-- end main content-->
+      </div>
+    </div>
+
+    <!-- JAVASCRIPT -->
+    <script src="/assets/libs/jquery/jquery.min.js"></script>
+    <script src="/assets/libs/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="/assets/libs/metismenu/metisMenu.min.js"></script>
+    <script src="/assets/libs/simplebar/simplebar.min.js"></script>
+    <script src="/assets/libs/node-waves/waves.min.js"></script>
+    <script
+      src="/assets/libs/jquery-sparkline/jquery.sparkline.min.js"></script>
+
+    <!--Morris Chart-->
+    <script src="/assets/libs/morris.js/morris.min.js"></script>
+    <script src="/assets/libs/raphael/raphael.min.js"></script>
+
+    <script src="/assets/js/pages/dashboard.init.js"></script>
+
+    <!-- App js -->
+    <script src="/assets/js/app.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+    <script
+      src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+    <script>
+        $(document).ready(function () {
+        $("#dataTable").DataTable({
+          "serverSide": true,
+          'paging': true,
+          'searching':true,
+          'ordering': true,
+          'serverMethod': "GET",
+          "ajax": {
+            'url': '/admin/getuserGroupdata',
+          },
+          'columns': [
+            {"data":'_id'},
+            {"data":'name'},
+            { "data": 'photo', render: function (data) { 
+              return `<img src="/assets/upload/${data}" alt="User Image"  class="rounded" style="width: 66px; height: 53px; margin-left:9%">`; 
+            }},
+            {"data":'limit'},
+            {"data": null,
+                render: function(data, type, row) {
+                  return `<div>
+                    <a href="/admin/viewuserGroupdata/${data._id}" class="btn btn-primary"><i class="fa fa-eye"></i></a>
+                    <button value="${data._id}" class="btn btn-danger deleteBtn"><i class="mdi mdi-delete"></i></button>
+                    </div>`;
+                }},
+                {
+                    data: null,
+                    render: function(data, type, row) {
+                      if(data.status == "active" ){
+                        return `<div class="checkbox-wrapper-14"><input type="checkbox" class="switch" name="my_checkbox" id="${data._id}" value="${data._id}" checked> </div>`
+                    }else{
+                      return `<div class="checkbox-wrapper-14"><input type="checkbox" class="switch" name="my_checkbox" id="${data._id}" value="${data._id}"></div>`
+                    }
+                  }
+                }
+              ]
+        });
+      });
+
+      $('#dataTable').on('click', '.deleteBtn', function () {
+        const userId = $(this).val();
+        Swal.fire({
+            title: 'Are you sure?',
+            text: 'You won\'t be able to revert this!',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+            if (result.isConfirmed) { 
+                $.ajax({
+                    url: `/admin/deletegroup/${userId}`,
+                    method: 'delete',
+                    success: function () {
+                      setTimeout(function () {
+                        $('#dataTable').DataTable().ajax.reload();
+                    }, 500); 
+                        Swal.fire('Deleted!', 'User has been deleted.', 'success');
+                    },
+                    error: function () {  
+                        Swal.fire('Error!', 'Failed to delete the User.', 'error');
+                    }
+                });
+            }
+        });
+    });
+
+      $(document).on('change', '.switch', function (e) {
+       let id  = $(this).val();
+       $.post(`/admin/updategroupstatus/${id}`,function(data){
+
+      Swal.fire({
+      icon: "success",
+      title: "Status Updated",
+      showConfirmButton: false,
+      timer: 1000
+      });
+       })
+    });
+        </script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  </body>
+
+</html>

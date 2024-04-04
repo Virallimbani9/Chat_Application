@@ -18,9 +18,13 @@ const GroupSchema = mongoose.Schema({
     required: true,
   },
   limit:{
-    type:Number,
+    type:String,
     required:true
-  }
+  },
+  status: {
+    type: String,
+    default: 'active'
+}
 }, { timestamps: true });
 
 
