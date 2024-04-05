@@ -605,7 +605,7 @@ const deleteGroup = async (req, res) => {
 };
 
 
-// ------------------ VIEW Group DATA ----------------------
+// ------------------ VIEW GROUP DATA ----------------------
 const viewUserGroupData = async (req, res) => {
   try {
     const data = req.admin;
@@ -625,12 +625,6 @@ const viewUserGroupData = async (req, res) => {
     res.status(500).send('Internal Server Error');
   }
 };
-
-
-
-
-
-
 
 
 
@@ -664,5 +658,5 @@ module.exports = {
     getUserGroupData,
     updateGroupStatus,
     deleteGroup,
-    viewUserGroupData,
+    viewUserGroupData
 }

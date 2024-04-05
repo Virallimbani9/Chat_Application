@@ -55,6 +55,7 @@ router.post('/updatestatus/:id',authenticateToken,adminCon.updateStatus)
 // -------------------------- DELETE USER ----------------------
 router.delete('/deleteuser/:id',authenticateToken,adminCon.deleteUser)
 
+// -------------------------------- GROUP  --------------------------------------
 router.get('/getusergrouplist',authenticateToken,adminCon.getusergrouplist);
 router.get('/getusergroupdata',authenticateToken,adminCon.getUserGroupData)
 
@@ -66,6 +67,8 @@ router.delete('/deletegroup/:id',authenticateToken,adminCon.deleteGroup)
 
 // -------------------------- VIEW GROUP DATA ----------------------
 router.get('/viewuserGroupdata/:id',authenticateToken,adminCon.viewUserGroupData)
+
+
 
 
 

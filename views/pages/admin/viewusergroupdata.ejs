@@ -126,21 +126,7 @@
                           </div>
                         </div>
                       </div>
-                      <div class="container">
-                        <table id="dataTable" class="display" style="text-align: center;">
-                          <thead>
-                            <tr>
-                              <th style="text-align: center;">ID</th>
-                              <th style="text-align: center;">NAME</th>
-                              <th style="text-align: center;">IMAGE</th>
-                              <th style="text-align: center;">PHONE</th>
-                              <th style="text-align: center;">CITY</th>
-                              <th style="text-align: center;">GRNDER</th>
-                              <th style="text-align: center;">STATUS</th>
-                            </tr>
-                          </thead>
-                        </table>
-                      </div>
+                      
                       
 
                       <%-include ("../../include/footer") %>  
@@ -167,57 +153,7 @@
             <!-- App js -->
             <script src="/assets/js/app.js"></script>
 
-            <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
-            <script
-              src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
-            <script>
-                $(document).ready(function () {
-                $("#dataTable").DataTable({
-                  "serverSide": true,
-                  'paging': true,
-                  'searching':true,
-                  'ordering': true,
-                  'serverMethod': "GET",
-                  "ajax": {
-                    'url': '/admin/getuserdata',
-                  },
-                  'columns': [
-                    {"data":'_id'},
-                    {"data":'name'},
-                    { "data": 'photo', render: function (data) { 
-                      return `<img src="/assets/upload/${data}" alt="User Image"  class="rounded" style="width: 66px; height: 53px; margin-left:9%">`; 
-                    }},
-                    {"data":'phone'},
-                    {"data":'city'},
-                    {"data":'gender'},
-                        {
-                            data: null,
-                            render: function(data, type, row) {
-                              if(data.status == "active" ){
-                                return `<div class="checkbox-wrapper-14"><input type="checkbox" class="switch" name="my_checkbox" id="${data._id}" value="${data._id}" checked> </div>`
-                            }else{
-                              return `<div class="checkbox-wrapper-14"><input type="checkbox" class="switch" name="my_checkbox" id="${data._id}" value="${data._id}"></div>`
-                            }
-                          }
-                        }
-                      ]
-                });
-              });
-        
-              $(document).on('change', '.switch', function (e) {
-               let id  = $(this).val();
-               $.post(`/admin/updatestatus/${id}`,function(data){
-        
-              Swal.fire({
-              icon: "success",
-              title: "Status Updated",
-              showConfirmButton: false,
-              timer: 1000
-              });
-               })
-            });
-                </script>
-            <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+            
 
 </body>
 
